@@ -9,10 +9,10 @@ import swing._
 import swing.event._
 
 class DrawingPanel extends Panel {
-  val imageWidth = 64
-  val imageHeight = 64
+  var imageWidth = 64
+  var imageHeight = 64
   var scale = 1.0
-  val image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB)
+  var image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB)
   var dragging = false
 
 
@@ -78,5 +78,13 @@ class DrawingPanel extends Panel {
 
   def saveImage(file: File) {
     ImageIO.write(image, "png", file)
+  }
+
+  def openImage(file: File) {
+    image = ImageIO.read(file)
+    imageWidth = image.getWidth
+    imageHeight = image.getHeight
+
+    repaint
   }
 }

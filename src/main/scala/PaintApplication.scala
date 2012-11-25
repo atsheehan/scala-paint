@@ -8,32 +8,50 @@ import javax.swing.BorderFactory
 import java.awt.{Graphics2D, Color}
 
 object PaintApplication extends SimpleSwingApplication {
-  val fileChooser = new FileChooser
+  val drawingPanel = new DrawingPanel
+
+  val fileChooser = new FileChooser {
+    multiSelectionEnabled = false
+    fileSelectionMode = SelectionMode.FilesOnly
+  }
 
   def top = new MainFrame {
     title = "paint"
     minimumSize = new Dimension(300, 300)
 
-    contents = new BoxPanel(Orientation.Vertical) {
-      val drawingPanel = new DrawingPanel
+    menuBar = new MenuBar {
+      contents += new Menu("File") {
+        contents += new MenuItem("Open") {
+          reactions += {
+            case ButtonClicked(_) => {
+              fileChooser.title = "Open File"
 
-      border = BorderFactory.createLineBorder(Color.RED, 20)
-
-      contents.append(drawingPanel)
-      contents.append(new Button("Save") {
-        reactions += {
-          case ButtonClicked(_) => {
-            fileChooser.title = "Save File"
-            fileChooser.multiSelectionEnabled = false
-            fileChooser.fileSelectionMode = SelectionMode.FilesOnly
-
-            val result = fileChooser.showSaveDialog(drawingPanel)
-            if (result == Result.Approve) {
-              drawingPanel.saveImage(fileChooser.selectedFile)
+              val result = fileChooser.showOpenDialog(drawingPanel)
+              if (result == Result.Approve) {
+                drawingPanel.openImage(fileChooser.selectedFile)
+              }
             }
           }
         }
-      })
+
+        contents += new MenuItem("Save") {
+          reactions += {
+            case ButtonClicked(_) => {
+              fileChooser.title = "Save File"
+
+              val result = fileChooser.showSaveDialog(drawingPanel)
+              if (result == Result.Approve) {
+                drawingPanel.saveImage(fileChooser.selectedFile)
+              }
+            }
+          }
+        }
+      }
+    }
+
+    contents = new BoxPanel(Orientation.Vertical) {
+      border = BorderFactory.createLineBorder(Color.RED, 20)
+      contents.append(drawingPanel)
     }
   }
 }
