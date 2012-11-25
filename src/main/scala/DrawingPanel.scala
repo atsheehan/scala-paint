@@ -2,6 +2,8 @@ package com.bazbatlabs.paint
 
 import java.awt.image.BufferedImage
 import java.awt.{Graphics2D, Color}
+import javax.imageio.ImageIO
+import java.io.File
 import swing._
 
 class DrawingPanel extends Panel {
@@ -14,5 +16,9 @@ class DrawingPanel extends Panel {
   def setPixel(x: Int, y: Int) {
     image.setRGB(x, y, Color.RED.getRGB())
     repaint
+  }
+
+  def saveImage() {
+    ImageIO.write(image, "png", new File("foo.png"))
   }
 }
