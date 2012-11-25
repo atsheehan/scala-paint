@@ -5,12 +5,32 @@ import java.awt.{Graphics2D, Color}
 import javax.imageio.ImageIO
 import java.io.File
 import swing._
+import swing.event._
 
 class DrawingPanel extends Panel {
-  val image = new BufferedImage(300, 300, BufferedImage.TYPE_INT_RGB)
+  val width = 64
+  val height = 64
+  var scale = 1.0
+  val image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+
+  listenTo(mouse.clicks, mouse.wheel)
+
+  reactions += {
+    case e: MouseClicked => {
+      this.setPixel(e.point.x, e.point.y)
+    }
+    case e: MouseWheelMoved => {
+      e.rotation match {
+        case 1 => scale *= 0.8
+        case -1 => scale *= 1.2
+      }
+      repaint
+    }
+  }
 
   override def paint(g: Graphics2D) {
-    g.drawImage(image, 0, 0, null)
+    g.clearRect(0, 0, size.width, size.height)
+    g.drawImage(image, 0, 0, (width * scale).toInt, (height * scale).toInt, null)
   }
 
   def setPixel(x: Int, y: Int) {
