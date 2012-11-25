@@ -8,7 +8,8 @@ import javax.swing.BorderFactory
 import java.awt.{Graphics2D, Color}
 
 object PaintApplication extends SimpleSwingApplication {
-  val drawingPanel = new DrawingPanel
+  val palette = new Palette
+  val drawingPanel = new DrawingPanel(palette)
 
   val fileChooser = new FileChooser {
     multiSelectionEnabled = false
@@ -50,8 +51,8 @@ object PaintApplication extends SimpleSwingApplication {
     }
 
     contents = new BoxPanel(Orientation.Vertical) {
-      border = BorderFactory.createLineBorder(Color.RED, 20)
       contents.append(drawingPanel)
+      contents.append(palette)
     }
   }
 }

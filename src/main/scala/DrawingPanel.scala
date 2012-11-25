@@ -8,14 +8,12 @@ import java.io.File
 import swing._
 import swing.event._
 
-class DrawingPanel extends Panel {
+class DrawingPanel(val palette: Palette) extends Panel {
   var imageWidth = 64
   var imageHeight = 64
   var scale = 1.0
   var image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB)
   var dragging = false
-
-
 
   listenTo(mouse.clicks, mouse.wheel, mouse.moves)
 
@@ -34,6 +32,7 @@ class DrawingPanel extends Panel {
 
   override def paint(g: Graphics2D) {
     val (screenWidth, screenHeight) = (size.width, size.height)
+
     val scaledImageWidth = (imageWidth * scale).toInt
     val scaledImageHeight = (imageWidth * scale).toInt
     val startX = (screenWidth - scaledImageWidth) / 2
@@ -59,7 +58,8 @@ class DrawingPanel extends Panel {
   }
 
   def setPixel(screenX: Int, screenY: Int) {
-    val (screenWidth, screenHeight) = (size.width, size.height)
+    val screenWidth = size.width
+    val screenHeight = size.height
     val scaledImageWidth = (imageWidth * scale).toInt
     val scaledImageHeight = (imageWidth * scale).toInt
     val startX = (screenWidth - scaledImageWidth) / 2
@@ -70,7 +70,7 @@ class DrawingPanel extends Panel {
 
     if (actualX >= 0 && actualX < imageWidth &&
         actualY >= 0 && actualY < imageHeight) {
-      image.setRGB(actualX, actualY, Color.RED.getRGB())
+      image.setRGB(actualX, actualY, palette.currentColor.getRGB())
     }
 
     repaint
