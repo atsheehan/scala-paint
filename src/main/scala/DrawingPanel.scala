@@ -12,13 +12,14 @@ class DrawingPanel extends Panel {
   val imageHeight = 64
   var scale = 1.0
   val image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB)
+  var dragging = false
 
-  listenTo(mouse.clicks, mouse.wheel)
+  listenTo(mouse.clicks, mouse.wheel, mouse.moves)
 
   reactions += {
-    case e: MouseClicked => {
-      this.setPixel(e.point.x, e.point.y)
-    }
+    case e: MousePressed => startDrag(e.point.x, e.point.y)
+    case e: MouseDragged => drag(e.point.x, e.point.y)
+    case _: MouseReleased => releaseDrag()
     case e: MouseWheelMoved => {
       e.rotation match {
         case 1 => scale *= 0.8
@@ -37,6 +38,21 @@ class DrawingPanel extends Panel {
 
     g.clearRect(0, 0, screenWidth, screenHeight)
     g.drawImage(image, startX, startY, scaledImageWidth, scaledImageHeight, null)
+  }
+
+  def startDrag(screenX: Int, screenY: Int) {
+    dragging = true
+    setPixel(screenX, screenY)
+  }
+
+  def drag(screenX: Int, screenY: Int) {
+    if (dragging) {
+      setPixel(screenX, screenY)
+    }
+  }
+
+  def releaseDrag() {
+    dragging = false
   }
 
   def setPixel(screenX: Int, screenY: Int) {
