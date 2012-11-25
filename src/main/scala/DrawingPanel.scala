@@ -8,10 +8,10 @@ import swing._
 import swing.event._
 
 class DrawingPanel extends Panel {
-  val width = 64
-  val height = 64
+  val imageWidth = 64
+  val imageHeight = 64
   var scale = 1.0
-  val image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+  val image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB)
 
   listenTo(mouse.clicks, mouse.wheel)
 
@@ -29,8 +29,14 @@ class DrawingPanel extends Panel {
   }
 
   override def paint(g: Graphics2D) {
-    g.clearRect(0, 0, size.width, size.height)
-    g.drawImage(image, 0, 0, (width * scale).toInt, (height * scale).toInt, null)
+    val (screenWidth, screenHeight) = (size.width, size.height)
+    g.clearRect(0, 0, screenWidth, screenHeight)
+
+    val scaledImageWidth = (imageWidth * scale).toInt
+    val scaledImageHeight = (imageWidth * scale).toInt
+
+    g.drawImage(image, (screenWidth - scaledImageWidth) / 2, (screenHeight - scaledImageHeight) / 2,
+                scaledImageWidth, scaledImageHeight, null)
   }
 
   def setPixel(x: Int, y: Int) {
