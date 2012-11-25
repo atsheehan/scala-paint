@@ -3,6 +3,7 @@ package com.bazbatlabs.paint
 import java.awt.image.BufferedImage
 import java.awt.{Graphics2D, Color}
 import javax.imageio.ImageIO
+
 import java.io.File
 import swing._
 import swing.event._
@@ -13,6 +14,8 @@ class DrawingPanel extends Panel {
   var scale = 1.0
   val image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB)
   var dragging = false
+
+
 
   listenTo(mouse.clicks, mouse.wheel, mouse.moves)
 
@@ -73,7 +76,7 @@ class DrawingPanel extends Panel {
     repaint
   }
 
-  def saveImage() {
-    ImageIO.write(image, "png", new File("foo.png"))
+  def saveImage(file: File) {
+    ImageIO.write(image, "png", file)
   }
 }
