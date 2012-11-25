@@ -17,11 +17,19 @@ object PaintApplication extends SimpleSwingApplication {
   }
 
   def top = new MainFrame {
-    title = "paint"
+    val window = this
     minimumSize = new Dimension(300, 300)
 
     menuBar = new MenuBar {
       contents += new Menu("File") {
+        contents += new MenuItem("New") {
+          reactions += {
+            case ButtonClicked(_) => {
+              new NewImageDialog(drawingPanel, window).show
+            }
+          }
+        }
+
         contents += new MenuItem("Open") {
           reactions += {
             case ButtonClicked(_) => {

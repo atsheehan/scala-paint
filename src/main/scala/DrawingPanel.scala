@@ -31,10 +31,10 @@ class DrawingPanel(val palette: Palette) extends Panel {
   }
 
   override def paint(g: Graphics2D) {
-    val (screenWidth, screenHeight) = (size.width, size.height)
-
+    val screenWidth = size.width
+    val screenHeight = size.height
     val scaledImageWidth = (imageWidth * scale).toInt
-    val scaledImageHeight = (imageWidth * scale).toInt
+    val scaledImageHeight = (imageHeight * scale).toInt
     val startX = (screenWidth - scaledImageWidth) / 2
     val startY = (screenHeight - scaledImageHeight) / 2
 
@@ -61,7 +61,7 @@ class DrawingPanel(val palette: Palette) extends Panel {
     val screenWidth = size.width
     val screenHeight = size.height
     val scaledImageWidth = (imageWidth * scale).toInt
-    val scaledImageHeight = (imageWidth * scale).toInt
+    val scaledImageHeight = (imageHeight * scale).toInt
     val startX = (screenWidth - scaledImageWidth) / 2
     val startY = (screenHeight - scaledImageHeight) / 2
 
@@ -84,6 +84,14 @@ class DrawingPanel(val palette: Palette) extends Panel {
     image = ImageIO.read(file)
     imageWidth = image.getWidth
     imageHeight = image.getHeight
+
+    repaint
+  }
+
+  def newImage(width: Int, height: Int) {
+    imageWidth = width
+    imageHeight = height
+    image = new BufferedImage(imageWidth, imageHeight, BufferedImage.TYPE_INT_RGB)
 
     repaint
   }
