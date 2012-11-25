@@ -30,17 +30,30 @@ class DrawingPanel extends Panel {
 
   override def paint(g: Graphics2D) {
     val (screenWidth, screenHeight) = (size.width, size.height)
-    g.clearRect(0, 0, screenWidth, screenHeight)
-
     val scaledImageWidth = (imageWidth * scale).toInt
     val scaledImageHeight = (imageWidth * scale).toInt
+    val startX = (screenWidth - scaledImageWidth) / 2
+    val startY = (screenHeight - scaledImageHeight) / 2
 
-    g.drawImage(image, (screenWidth - scaledImageWidth) / 2, (screenHeight - scaledImageHeight) / 2,
-                scaledImageWidth, scaledImageHeight, null)
+    g.clearRect(0, 0, screenWidth, screenHeight)
+    g.drawImage(image, startX, startY, scaledImageWidth, scaledImageHeight, null)
   }
 
-  def setPixel(x: Int, y: Int) {
-    image.setRGB(x, y, Color.RED.getRGB())
+  def setPixel(screenX: Int, screenY: Int) {
+    val (screenWidth, screenHeight) = (size.width, size.height)
+    val scaledImageWidth = (imageWidth * scale).toInt
+    val scaledImageHeight = (imageWidth * scale).toInt
+    val startX = (screenWidth - scaledImageWidth) / 2
+    val startY = (screenHeight - scaledImageHeight) / 2
+
+    val actualX = ((screenX - startX) / scale).toInt
+    val actualY = ((screenY - startY) / scale).toInt
+
+    if (actualX >= 0 && actualX < imageWidth &&
+        actualY >= 0 && actualY < imageHeight) {
+      image.setRGB(actualX, actualY, Color.RED.getRGB())
+    }
+
     repaint
   }
 
