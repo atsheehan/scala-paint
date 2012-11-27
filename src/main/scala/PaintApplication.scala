@@ -1,5 +1,8 @@
 package com.bazbatlabs.paint
 
+import com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel
+import javax.swing.{UIManager}
+
 import java.awt.Dimension
 import swing._
 import swing.FileChooser._
@@ -8,6 +11,12 @@ import javax.swing.BorderFactory
 import java.awt.{Graphics2D, Color}
 
 object PaintApplication extends SimpleSwingApplication {
+  for (style: UIManager.LookAndFeelInfo <- UIManager.getInstalledLookAndFeels()) {
+    if ("Nimbus".equals(style.getName())) {
+      UIManager.setLookAndFeel(style.getClassName())
+    }
+  }
+
   val palette = new Palette
   val drawingPanel = new DrawingPanel(palette)
 
